@@ -1,0 +1,13 @@
+name: Nemesis
+version: '0.0.1'
+
+main: me.jh508.nemesis.Nemesis
+api-version: '26.1.2'
+load: POSTWORLD
+
+commands:
+  punish:
+    description: Includes everything you need for moderating your Minecraft server
+    usage: /punish
+    permission: moderation.punish
+    aliases: /p

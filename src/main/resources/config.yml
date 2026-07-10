@@ -1,0 +1,35 @@
+####################################################################################################
+# +----------------------------------------------------------------------------------------------+ #
+# |                                                                                                 | #
+# |            _   _                           _                                                    | #
+# |           | \ | |                         (_)                                                   | #
+# |           |  \| | ___ _ __ ___   ___  ___  _ ___                                                | #
+# |           | . ` |/ _ \ '_ ` _ \ / _ \/ __|| / __|                                               | #
+# |           | |\  |  __/ | | | | |  __/\__ \| \__ \                                               | #
+# |           |_| \_|\___|_| |_| |_|\___||___/|_|___/                                               | #
+# |                                                                                                 | #
+# |           https://github.com/jh508/Nemesis                                                      | #
+# |                                                                                                 | #
+# |           BUG REPORTS: https://github.com/jh508/Nemesis/issues                                  | #
+# |                                                                                                 | #
+# |           This is under active-development, and is not at a "release" stage.                    | #
+# |           Currently only supports YAML file storage, with plans to add SQL support later.       | #
+# |           Not recommended for use on live Minecraft sites.                                      | #
+# +----------------------------------------------------------------------------------------------+ #
+####################################################################################################
+
+# +----------------------------------------------------------------------------------------------+ #
+# |                                                                                                | #
+# |                                      ESSENTIAL SETTINGS                                        | #
+# |                                                                                                | #
+# |                   Important settings that control how Nemesis functions.                       | #
+# |                                                                                                | #
+# +----------------------------------------------------------------------------------------------+ #
+
+# The method used to store punishment data.
+# Options:
+#   file - stores punishments in a local YAML file (data/punishments.yml). No setup required,
+#          best for single, standalone servers.
+storage-method: file
+
+appeals-url: "www.example.com/appeals"
