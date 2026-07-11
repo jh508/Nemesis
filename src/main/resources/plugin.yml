@@ -10,4 +10,5 @@ commands:
     description: Includes everything you need for moderating your Minecraft server
     usage: /punish
     permission: moderation.punish
-    aliases: /p
+    aliases:
+      - p
