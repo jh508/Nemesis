@@ -30,6 +30,21 @@
 # Options:
 #   file - stores punishments in a local YAML file (data/punishments.yml). No setup required,
 #          best for single, standalone servers.
+#   sql -  stores punishments in a MySQL database. Requires the "sql" section below to be
+#          configured. Recommended for networks or servers wanting external/shared storage.
 storage-method: file
 
 appeals-url: "www.example.com/appeals"
+
+# Only used when storage-method is set to "sql".
+sql:
+  host: "localhost"
+  port: 3306
+  database: ""
+  user: "root"
+  password: ""
+  # Prefixed to table names, useful when sharing a database with other plugins.
+  table-prefix: "nemesis_"
+  # Maximum number of pooled connections HikariCP will open.
+  pool-size: 10
+

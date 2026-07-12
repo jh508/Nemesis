@@ -115,9 +115,14 @@ public class PunishMainMenu implements Menu {
         {
             if (historyEntry.isActive())
             {
-                Nemesis.getInstance().getStorage().revoke(historyEntry.getId(), issuer);
-                player.sendMessage("Revoked " + historyEntry.getType() + " #" + historyEntry.getId() + " for " + target + ".");
-                createHistory();
+                Bukkit.getScheduler().runTaskAsynchronously(Nemesis.getInstance(), () -> {
+                    Nemesis.getInstance().getStorage().revoke(historyEntry.getId(), issuer);
+
+                    Bukkit.getScheduler().runTask(Nemesis.getInstance(), () -> {
+                        player.sendMessage("Revoked " + historyEntry.getType() + " #" + historyEntry.getId() + " for " + target + ".");
+                        createHistory();
+                    });
+                });
             }
             return;
         }
@@ -141,8 +146,8 @@ public class PunishMainMenu implements Menu {
         Instant now = Instant.now();
         Instant expiresAt = punishmentOption.isPermanent() ? null : now.plus(punishmentOption.duration());
 
-        Nemesis.getInstance().getStorage().save(new Punishment(
-                targetId, target, issuer, PunishmentType.BAN, reason, now, expiresAt));
+        Punishment punishment = new Punishment(targetId, target, issuer, PunishmentType.BAN, reason, now, expiresAt);
+        saveAsync(punishment);
 
         Player online = Bukkit.getPlayerExact(target);
         if (online != null)
@@ -160,16 +165,16 @@ public class PunishMainMenu implements Menu {
         Instant now = Instant.now();
         Instant expiresAt = punishmentOption.isPermanent() ? null : now.plus(punishmentOption.duration());
 
-        Nemesis.getInstance().getStorage().save(new Punishment(
-                targetId, target, issuer, PunishmentType.MUTE, reason, now, expiresAt));
+        Punishment punishment = new Punishment(targetId, target, issuer, PunishmentType.MUTE, reason, now, expiresAt);
+        saveAsync(punishment);
     }
 
     private void warn(PunishmentOption punishmentOption)
     {
         Instant now = Instant.now();
 
-        Nemesis.getInstance().getStorage().save(new Punishment(
-                targetId, target, issuer, PunishmentType.WARN, reason, now, null));
+        Punishment punishment = new Punishment(targetId, target, issuer, PunishmentType.WARN, reason, now, null);
+        saveAsync(punishment);
 
         Player online = Bukkit.getPlayerExact(target);
         if (online != null)
@@ -179,12 +184,25 @@ public class PunishMainMenu implements Menu {
         }
     }
 
+    private void saveAsync(Punishment punishment)
+    {
+        Bukkit.getScheduler().runTaskAsynchronously(Nemesis.getInstance(),
+                () -> Nemesis.getInstance().getStorage().save(punishment));
+    }
+
     private void createHistory()
     {
-        List<Punishment> history = Nemesis.getInstance().getStorage().getHistory(targetId).stream()
-                .sorted(Comparator.comparing(Punishment::getIssuedAt).reversed())
-                .collect(Collectors.toList());
+        Bukkit.getScheduler().runTaskAsynchronously(Nemesis.getInstance(), () -> {
+            List<Punishment> history = Nemesis.getInstance().getStorage().getHistory(targetId).stream()
+                    .sorted(Comparator.comparing(Punishment::getIssuedAt).reversed())
+                    .collect(Collectors.toList());
 
+            Bukkit.getScheduler().runTask(Nemesis.getInstance(), () -> applyHistory(history));
+        });
+    }
+
+    private void applyHistory(List<Punishment> history)
+    {
         historyBySlot.clear();
 
         for (int slot = HISTORY_START_SLOT; slot <= HISTORY_END_SLOT; slot++)
