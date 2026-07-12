@@ -2,7 +2,7 @@
 
 A GUI-driven moderation plugin for Paper servers. Punish players — mute, ban, or warn — through an inventory menu instead of memorizing command syntax, with full punishment history and one-click revocation.
 
-> **Status:** actively in development, not yet at a stable release. Currently supports YAML file storage only (SQL storage is planned). Not recommended for production servers yet.
+> **Status:** actively in development, not yet at a stable release.
 
 
 <img width="346" height="430" alt="image" src="https://github.com/user-attachments/assets/374cd387-22c5-4d4b-a469-60591ef72d19" />
