@@ -15,6 +15,7 @@ A GUI-driven moderation plugin for Paper servers. Punish players — mute, ban, 
 - **Punishment history** — every past punishment for a player is shown directly in the menu, with reason, issue date, expiry, and issuer. Active punishments glow and can be revoked with a click.
 - **Custom mute/ban enforcement** — mutes are enforced on chat, bans on login — both driven by the plugin's own storage rather than Bukkit's ban list, so revoking a punishment actually lifts it.
 - **File-based storage** — punishment records are stored in `data/punishments.yml`, no database required.
+- **SQL support** — punishment records are stored in MySQL database, perfect for servers who wants punishments to persist Network-wide.
 
 <img width="346" height="436" alt="image" src="https://github.com/user-attachments/assets/57301b16-5174-4712-b694-c6d6ad65244a" />
 
