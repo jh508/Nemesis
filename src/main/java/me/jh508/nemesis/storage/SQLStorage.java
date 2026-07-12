@@ -25,6 +25,11 @@ public class SQLStorage implements PunishmentStorage {
 
     public SQLStorage(HikariDataSource dataSource, String tablePrefix, Logger logger)
     {
+        if (!tablePrefix.matches("[A-Za-z0-9_]*"))
+        {
+            throw new IllegalArgumentException("sql.table-prefix must only contain letters, digits, and underscores: " + tablePrefix);
+        }
+
         this.dataSource = dataSource;
         this.tableName = tablePrefix + "punishments";
         this.logger = logger;
@@ -88,6 +93,7 @@ public class SQLStorage implements PunishmentStorage {
         } catch (SQLException ex)
         {
             logger.severe("Failed to save punishment: " + ex.getMessage());
+            throw new StorageException("Failed to save punishment for " + punishment.getTarget(), ex);
         }
     }
 
@@ -121,6 +127,7 @@ public class SQLStorage implements PunishmentStorage {
         } catch (SQLException ex)
         {
             logger.severe("Failed to fetch active " + type + " for " + target + ": " + ex.getMessage());
+            throw new StorageException("Failed to fetch active " + type + " for " + target, ex);
         }
 
         return Optional.empty();
@@ -139,6 +146,7 @@ public class SQLStorage implements PunishmentStorage {
         } catch (SQLException ex)
         {
             logger.severe("Failed to revoke punishment " + punishmentId + ": " + ex.getMessage());
+            throw new StorageException("Failed to revoke punishment " + punishmentId, ex);
         }
     }
 
@@ -162,6 +170,7 @@ public class SQLStorage implements PunishmentStorage {
         } catch (SQLException ex)
         {
             logger.severe("Failed to fetch history for " + target + ": " + ex.getMessage());
+            throw new StorageException("Failed to fetch history for " + target, ex);
         }
 
         return history;
@@ -186,6 +195,7 @@ public class SQLStorage implements PunishmentStorage {
         } catch (SQLException ex)
         {
             logger.severe("Failed to fetch punishment " + punishmentId + ": " + ex.getMessage());
+            throw new StorageException("Failed to fetch punishment " + punishmentId, ex);
         }
 
         return Optional.empty();

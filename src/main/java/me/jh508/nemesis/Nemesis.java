@@ -36,8 +36,20 @@ public final class Nemesis extends JavaPlugin {
         {
             case "file" -> new FileStorage(new File(getDataFolder(), "punishments.yml"), getLogger());
             case "sql" -> {
-                this.dataSource = createSqlDataSource(config);
-                yield new SQLStorage(dataSource, config.getSqlTablePrefix(), getLogger());
+                try
+                {
+                    this.dataSource = createSqlDataSource(config);
+                    yield new SQLStorage(dataSource, config.getSqlTablePrefix(), getLogger());
+                } catch (Exception ex)
+                {
+                    getLogger().severe("Failed to initialize SQL storage, falling back to file storage: " + ex.getMessage());
+                    if (dataSource != null)
+                    {
+                        dataSource.close();
+                        dataSource = null;
+                    }
+                    yield new FileStorage(new File(getDataFolder(), "punishments.yml"), getLogger());
+                }
             }
             default ->
             {

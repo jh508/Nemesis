@@ -39,7 +39,7 @@ A GUI-driven moderation plugin for Paper servers. Punish players — mute, ban, 
 mvn clean package
 ```
 
-The shaded jar will be output to `target/nemesis-1.0-SNAPSHOT.jar`.
+The shaded jar will be output to `target/nemesis-1.0.0.jar`.
 
 ## Usage
 
@@ -64,13 +64,22 @@ Opens the punishment menu for `<player>` with the given reason. Select a punishm
 storage-method: file
 
 appeals-url: "www.example.com/appeals"
+
+sql:
+  host: localhost
+  port: 3306
+  database: ""
+  user: root
+  password: ""
+  table-prefix: "nemesis_"
+  pool-size: 10
 ```
 
-- `storage-method` — how punishment data is stored. Only `file` is currently implemented; other values fall back to file storage with a warning.
+- `storage-method` — how punishment data is stored: `file` or `sql`. Unrecognized values fall back to file storage with a warning.
 - `appeals-url` — shown to banned players on the kick screen.
+- `sql.*` — connection settings used when `storage-method` is `sql`. If the SQL connection can't be established, the plugin falls back to file storage and logs an error.
 
 ## Roadmap
 
-- SQL storage backend (MySQL/MariaDB), for servers running a network of multiple instances.
 - Tiered permissions (e.g. separate permission for permanent punishments and revocations).
 - Pagination for players with a long punishment history.
