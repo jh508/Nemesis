@@ -109,13 +109,15 @@ public class SQLStorage implements PunishmentStorage {
 
     private Optional<Punishment> getActive(UUID target, PunishmentType type)
     {
-        String sql = "SELECT * FROM " + tableName + " WHERE target = ? AND type = ? AND active = TRUE LIMIT 1";
+        String sql = "SELECT * FROM " + tableName +
+                " WHERE target = ? AND type = ? AND active = TRUE AND (expires_at IS NULL OR expires_at > ?) LIMIT 1";
 
         try (Connection conn = dataSource.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql))
         {
             stmt.setString(1, target.toString());
             stmt.setString(2, type.name());
+            stmt.setTimestamp(3, Timestamp.from(Instant.now()));
 
             try (ResultSet rs = stmt.executeQuery())
             {
